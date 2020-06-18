@@ -25,8 +25,6 @@ BOOL CDlgSave::OnInitDialog()
 
     // TODO: put strings to resources
 
-    SetWindowText(L"Save to file");
-
     m_hEditFile.SetWindowText(L"SystemStats.txt");
     m_hEditRecords.SetWindowText(L"1-100");
 
