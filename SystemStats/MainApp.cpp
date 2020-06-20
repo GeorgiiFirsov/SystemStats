@@ -1,7 +1,6 @@
 // Project headers
 #include "stdafx.h"
 #include "MainApp.h"
-#include "ProcessInfo.h"
 
 // STL headers
 #include <vector>
@@ -27,6 +26,10 @@ namespace system_stats
         {
         case WM_TIMEDUPDATE:
             return Application.OnTimedUpdate(hWnd, wParam, lParam);
+            break;
+
+        case WM_VIEWITEMDBLCLICK:
+            return Application.OnViewItemDblClicked(hWnd, wParam, lParam);
             break;
 
         case WM_SIZE:
@@ -107,8 +110,8 @@ namespace system_stats
             // Create main window and show it
             // 
 
-            int iWidth  = Rect.Width() < iWndMinWidth ? iWndMinWidth : Rect.Width();
-            int iHeight = Rect.Height() < iWndMinHeight ? iWndMinHeight : Rect.Height();
+            int iWidth  = Rect.Width() < g_iWndMinWidth ? g_iWndMinWidth : Rect.Width();
+            int iHeight = Rect.Height() < g_iWndMinHeight ? g_iWndMinHeight : Rect.Height();
 
             m_hWnd = ::CreateWindow(
                 szApplicationName,
@@ -133,10 +136,10 @@ namespace system_stats
             // Initialize processes view and show it
             // 
 
-            CPoint TLPoint(iLVOffsetLeft, iLVOffsetTop);
+            CPoint TLPoint(g_iLVOffsetLeft, g_iLVOffsetTop);
             CPoint BRPoint(
-                Rect.Width() - iLVOffsetLeft - 18, // Magic number
-                Rect.Height() - iLVOffsetTop - 10  // Magic number
+                Rect.Width() - g_iLVOffsetLeft - 18, // Magic number
+                Rect.Height() - g_iLVOffsetTop - 10  // Magic number
             );
 
             m_View.Create(
@@ -145,7 +148,7 @@ namespace system_stats
                 CWnd::FromHandle(m_hWnd),
                 UNIQUE_ID
             );
-
+            
             m_View.InsertColumns(g_columns);
             m_View.ShowWindow(nShowCmd);
 
@@ -153,14 +156,14 @@ namespace system_stats
             // Create snapshot button
             // 
 
-            CPoint SnapBtnPos(iSnapBtnOffsetLeft, iSnapBtnOffsetTop);
+            CPoint SnapBtnPos(g_iSnapBtnOffsetLeft, g_iSnapBtnOffsetTop);
 
             m_hSnapBtn.Create(
-                szSnapBtnText, 
+                g_szSnapBtnText, 
                 WS_CHILD | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON, 
                 CRect(SnapBtnPos, BUTTON_SIZE),
                 CWnd::FromHandle(m_hWnd),
-                nSnapBtnID
+                g_nSnapBtnID
             );
 
             m_hSnapBtn.ShowWindow(nShowCmd);
@@ -170,18 +173,20 @@ namespace system_stats
             // Create save button
             // 
             
-            CPoint SaveBtnPos(iSaveBtnOffsetLeft, iSaveBtnOffsetTop);
+            CPoint SaveBtnPos(g_iSaveBtnOffsetLeft, g_iSaveBtnOffsetTop);
 
             m_hSaveBtn.Create(
-                szSaveBtnText,
+                g_szSaveBtnText,
                 WS_CHILD | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON,
                 CRect(SaveBtnPos, BUTTON_SIZE),
                 CWnd::FromHandle(m_hWnd),
-                nSaveBtnID
+                g_nSaveBtnID
             );
 
             m_hSaveBtn.ShowWindow(nShowCmd);
             m_hSaveBtn.UpdateWindow();
+
+            // TODO: timeout combobox
 
             _RunScheduler();
         });
@@ -190,7 +195,7 @@ namespace system_stats
     DWORD CMainApp::_UpdateInfo()
     {
         //
-        // Freeze current state to retreive information
+        // Freeze current state to retrieve information
         // 
 
         HANDLE hProcessSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
@@ -212,13 +217,15 @@ namespace system_stats
             return GetLastError();
         }
 
+        //
+        // Clear view and fill it with new info
+        // 
+
         m_View.DeleteAllItems();
 
         do 
         {
-            m_View.InsertItem(
-                CProcessInfo(Info.szExeFile, Info.th32ProcessID, Info.th32ParentProcessID, Info.cntThreads)
-            );
+            m_View.InsertItem(Info);
         } while (::Process32Next(hProcessSnapshot, &Info));
 
         return ERROR_SUCCESS;
@@ -260,7 +267,7 @@ namespace system_stats
             // 
 
             m_hSchedulerWantStop.Set();
-            ::WaitForSingleObject(m_hSchedulerThread, ullSchedulerWaitTimeout);
+            ::WaitForSingleObject(m_hSchedulerThread, g_dwSchedulerWaitTimeout);
             ::CloseHandle(m_hSchedulerThread), m_hSchedulerThread = nullptr;
         }
     }
@@ -270,6 +277,10 @@ namespace system_stats
         if (!m_hSchedulerThread) {
             return false;
         }
+
+        //
+        // Double check for thread state
+        // 
 
         DWORD dwExitCode = ERROR_SUCCESS;
         ::GetExitCodeThread(m_hSchedulerThread, &dwExitCode);
@@ -294,7 +305,7 @@ namespace system_stats
         while(::WaitForSingleObject(self->m_hSchedulerWantStop, 0) == WAIT_TIMEOUT)
         {
             ::SendMessage(self->m_hWnd, WM_TIMEDUPDATE, 0, 0);
-            ::Sleep(ullTimeout * 1000);
+            ::Sleep(self->m_dwTimeOut * 1000);
         }
 
         ::ExitThread(ERROR_SUCCESS);
@@ -339,10 +350,10 @@ namespace system_stats
         CRect Rect;
         ::GetWindowRect(m_hWnd, &Rect);
 
-        Rect.right  -= Rect.left - iLVOffsetLeft;
-        Rect.bottom -= Rect.top - iLVOffsetTop;
-        Rect.left = iLVOffsetLeft;
-        Rect.top  = iLVOffsetTop;
+        Rect.right  -= Rect.left - g_iLVOffsetLeft;
+        Rect.bottom -= Rect.top - g_iLVOffsetTop;
+        Rect.left = g_iLVOffsetLeft;
+        Rect.top  = g_iLVOffsetTop;
 
         m_View.MoveWindow(Rect);
 
@@ -366,23 +377,23 @@ namespace system_stats
         int iWidth = pRect->right - pRect->left;
         int iHeight = pRect->bottom - pRect->top;
 
-        if (iWidth < iWndMinWidth)
+        if (iWidth < g_iWndMinWidth)
         {
             if (wParam == WMSZ_LEFT || wParam == WMSZ_TOPLEFT || wParam == WMSZ_BOTTOMLEFT) {
-                pRect->left = pRect->right - iWndMinWidth;
+                pRect->left = pRect->right - g_iWndMinWidth;
             }
             else if (wParam == WMSZ_RIGHT || wParam == WMSZ_TOPRIGHT || wParam == WMSZ_BOTTOMRIGHT) {
-                pRect->right = pRect->left + iWndMinWidth;
+                pRect->right = pRect->left + g_iWndMinWidth;
             }
         }
 
-        if (iHeight < iWndMinHeight)
+        if (iHeight < g_iWndMinHeight)
         {
             if (wParam == WMSZ_TOP || wParam == WMSZ_TOPLEFT || wParam == WMSZ_TOPRIGHT) {
-                pRect->top = pRect->bottom - iWndMinHeight;
+                pRect->top = pRect->bottom - g_iWndMinHeight;
             }
             else if (wParam == WMSZ_BOTTOM || wParam == WMSZ_BOTTOMLEFT || wParam == WMSZ_BOTTOMRIGHT) {
-                pRect->bottom = pRect->top + iWndMinHeight;
+                pRect->bottom = pRect->top + g_iWndMinHeight;
             }
         }
 
@@ -397,11 +408,11 @@ namespace system_stats
         
         switch (LOWORD(wParam))
         {
-        case nSnapBtnID:
+        case g_nSnapBtnID:
             return OnSnapBtnPressed();
             break;
 
-        case nSaveBtnID:
+        case g_nSaveBtnID:
             return OnSaveBtnPressed();
             break;
 
@@ -436,22 +447,21 @@ namespace system_stats
     LRESULT MSG_HANDLER CMainApp::OnSaveBtnPressed()
     {
         namespace exc = system_stats::exception;
+
+        DWORD dwResult = 0;
+        bool bIsSchedulerRunning = _IsSchedulerRunning();
+
+        if (bIsSchedulerRunning) {
+            _StopScheduler();
+        }
+
         try
         {
-            bool bIsSchedulerRunning = _IsSchedulerRunning();
-
-            if (bIsSchedulerRunning) {
-                _StopScheduler();
-            }
-
             CDlgSave Dlg(CWnd::FromHandle(m_hWnd));
 
-            if (Dlg.DoModal() == IDOK) {
+            if (Dlg.DoModal() == IDOK) 
+            {
                 ::MessageBox(m_hWnd, L"Saving is not supported yet", szApplicationName, MB_ICONWARNING);
-            }
-
-            if (bIsSchedulerRunning) {
-                _RunScheduler();
             }
         }
         catch(const std::runtime_error& error)
@@ -459,10 +469,62 @@ namespace system_stats
             OutputDebugStringA(error.what());
             exc::DisplayErrorMessage(error);
 
-            return ERROR_FUNCTION_FAILED;
+            dwResult = ERROR_FUNCTION_FAILED;
         }
 
-        return static_cast<LRESULT>(0);
+        if (bIsSchedulerRunning) {
+            _RunScheduler();
+        }
+
+        return static_cast<LRESULT>(dwResult);
+    }
+
+    LRESULT MSG_HANDLER CMainApp::OnViewItemDblClicked(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam)
+    {
+        UNREFERENCED_PARAMETER(hWnd);
+        UNREFERENCED_PARAMETER(lParam);
+
+        namespace exc = system_stats::exception;
+
+        DWORD dwResult = 0;
+        bool bIsSchedulerRunning = _IsSchedulerRunning();
+
+        if (bIsSchedulerRunning) {
+            _StopScheduler();
+        }
+
+        try
+        {
+            auto nItem = static_cast<size_t>(wParam);
+
+            //
+            // Query selected item from view and
+            // start dialog
+            // 
+
+            PROCESSENTRY32 Info;
+            dwResult = m_View.GetNthProcess(nItem, Info);
+
+            if (dwResult != ERROR_SUCCESS) {
+                exc::ThrowRuntimeError("Invalid item selected");
+            }
+
+            CDlgProcessInfo Dlg(Info, CWnd::FromHandle(m_hWnd));
+            Dlg.DoModal();
+        }
+        catch(const std::runtime_error& error)
+        {
+            OutputDebugStringA(error.what());
+            exc::DisplayErrorMessage(error);
+
+            dwResult = ERROR_FUNCTION_FAILED;
+        }
+
+        if (bIsSchedulerRunning) {
+            _RunScheduler();
+        }
+
+        return static_cast<LRESULT>(dwResult);
     }
 
 } // namespace system_stats

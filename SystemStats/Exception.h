@@ -46,10 +46,10 @@ namespace
     }
 
     // Function that displays a message about error
-    inline void DisplayErrorMessage(const std::runtime_error& error) noexcept
+    inline void DisplayErrorMessage(const std::runtime_error& error, HWND hWnd = nullptr) noexcept
     {
         ::OutputDebugStringA(error.what());
-        ::MessageBoxA(nullptr, error.what(), "Error occurred", MB_ICONERROR);
+        ::MessageBoxA(hWnd, error.what(), szApplicationNameA, MB_ICONERROR);
     }
 
 } // namespace exception

@@ -27,6 +27,9 @@
     <ClCompile Include="DlgSave.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DlgProcessInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -44,13 +47,13 @@
     <ClInclude Include="ProcessesView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DlgSave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgProcessInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

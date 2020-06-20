@@ -161,19 +161,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DlgProcessInfo.cpp" />
     <ClCompile Include="DlgSave.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="ProcessView.cpp" />
     <ClCompile Include="SystemStats.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DlgProcessInfo.h" />
     <ClInclude Include="DlgSave.h" />
     <ClInclude Include="ProcessesView.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="MainApp.h" />
-    <ClInclude Include="ProcessInfo.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

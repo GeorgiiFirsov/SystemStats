@@ -19,6 +19,84 @@
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SAVEDLG DIALOGEX 0, 0, 211, 108
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Save to file"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_SAVEDLG_FILENAME,7,20,197,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,99,87,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,154,87,50,14
+    CONTROL         "Capture all",IDC_SAVEDLG_RDALL,"Button",BS_AUTORADIOBUTTON,7,42,51,10
+    CONTROL         "Choose:",IDC_SAVEDLG_RDSPCF,"Button",BS_AUTORADIOBUTTON,7,56,43,10
+    LTEXT           "File name:",IDC_STATIC,7,7,34,8
+    EDITTEXT        IDC_SAVEDLG_RECORDS,53,54,68,14,ES_AUTOHSCROLL | WS_DISABLED
+END
+
+IDD_DLGINFO DIALOGEX 0, 0, 309, 154
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Extended process information"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,252,133,50,14
+    GROUPBOX        "Process info",IDC_STATIC,7,7,295,59
+    LTEXT           "Executable name: .............................................",IDC_STATIC,13,20,180,8
+    LTEXT           "Process identifier: .............................................",IDC_STATIC,13,30,180,8
+    LTEXT           "Process priority: ...............................................",IDC_STATIC,13,40,180,8
+    LTEXT           "Parent process identifier: ....................................",IDC_STATIC,13,50,180,8
+    LTEXT           "not available",IDC_DLGINFO_EXETEXT,194,20,100,8
+    LTEXT           "not available",IDC_DLGINFO_PIDTEXT,194,30,100,8
+    LTEXT           "not available",IDC_DLGINFO_PRTEXT,194,40,100,8
+    LTEXT           "not available",IDC_DLGINFO_PPIDTEXT,194,50,100,8
+    GROUPBOX        "Process extended info",IDC_STATIC,7,70,295,59
+    CTEXT           "Access denied",IDC_DLGINFO_ACCESSTEXT,9,97,289,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_SAVEDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 204
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 101
+    END
+
+    IDD_DLGINFO, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_SAVEDLG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLGINFO AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -43,56 +121,6 @@ BEGIN
 END
 
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_SAVEDLG DIALOGEX 0, 0, 211, 108
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Save to file"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    EDITTEXT        IDC_SAVEDLG_FILENAME,7,20,197,14,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,99,87,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,154,87,50,14
-    CONTROL         "Capture all",IDC_SAVEDLG_RDALL,"Button",BS_AUTORADIOBUTTON,7,42,51,10
-    CONTROL         "Choose:",IDC_SAVEDLG_RDSPCF,"Button",BS_AUTORADIOBUTTON,7,56,43,10
-    LTEXT           "File name:",IDC_STATIC,7,7,34,8
-    EDITTEXT        IDC_SAVEDLG_RECORDS,53,54,68,14,ES_AUTOHSCROLL | WS_DISABLED
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_SAVEDLG, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 204
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 101
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// AFX_DIALOG_LAYOUT
-//
-
-IDD_SAVEDLG AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

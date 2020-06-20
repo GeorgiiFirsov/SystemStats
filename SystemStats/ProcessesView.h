@@ -2,7 +2,6 @@
 
 // Project headers
 #include "stdafx.h"
-#include "ProcessInfo.h"
 
 // STL headers
 #include <vector>
@@ -23,10 +22,18 @@ namespace system_stats
         void InsertColumns(_In_ const std::vector<LPCWSTR>& columns);
 
         _On_failure_(return == -1)
-        int InsertItem(_In_ const CProcessInfo& Info);
+        int InsertItem(_In_ const PROCESSENTRY32& Info);
+
+        _On_failure_(return == ERROR_SUCCESS)
+        DWORD GetNthProcess(_In_ size_t nIndex, _Out_ PROCESSENTRY32& Entry);
+
+    protected:
+        DECLARE_MESSAGE_MAP()
+
+        afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 
     private:
-        size_t m_cItems = 0;
+        std::vector<PROCESSENTRY32> m_Items;
     };
 
 } // namespace system_stats

@@ -31,6 +31,8 @@ public:
 protected:
     virtual void DoDataExchange(CDataExchange* pDX) override;
 
+    void DDV_GoodRange(CDataExchange* pDX);
+
     //
     // Message handlers
     // 
@@ -50,7 +52,7 @@ private:
     // Radio button corresponds to saving of all records
     CButton m_hRdAll;
 
-    // Radio buton that enables edit control with 
+    // Radio button that enables edit control with 
     // request to specify which records to save
     CButton m_hRdChoose;
 };

@@ -3,6 +3,7 @@
 // Project headers
 #include "stdafx.h"
 #include "DlgSave.h"
+#include "DlgProcessInfo.h"
 #include "Exception.h"
 #include "ProcessesView.h"
 
@@ -13,51 +14,45 @@
 #include <atomic>
 
 
-/* Custom messages declaration */
-
-// Message used for update data about processes
-#define WM_TIMEDUPDATE (WM_USER + 1)
-
-
 /* Useful macro declarations and global definitions */
 
 // Macro to more easily distinguish message handlers
 // between all other functions
 #define MSG_HANDLER __stdcall
 
-// Update timeout (in seconds)
-constexpr size_t ullTimeout = 2;
+// Default update timeout (in seconds)
+constexpr DWORD g_dwDefaultTimeout = 2;
 
 // Maximum wait timeout for stopping scheduler (in seconds)
-constexpr size_t ullSchedulerWaitTimeout = 5;
+constexpr DWORD g_dwSchedulerWaitTimeout = 5;
 
 // Minimal window size
-constexpr int iWndMinWidth  = 500;
-constexpr int iWndMinHeight = 300;
+constexpr int g_iWndMinWidth  = 500;
+constexpr int g_iWndMinHeight = 300;
 
 // List view position
-constexpr int iLVOffsetTop  = 28;
-constexpr int iLVOffsetLeft = 0;
+constexpr int g_iLVOffsetTop  = 28;
+constexpr int g_iLVOffsetLeft = 0;
 
 // Button sizes
-constexpr int iBtnWidth  = 72;
-constexpr int iBtnHeight = 22;
+constexpr int g_iBtnWidth  = 72;
+constexpr int g_iBtnHeight = 22;
 
-#define BUTTON_SIZE SIZE{ iBtnWidth, iBtnHeight }
+#define BUTTON_SIZE SIZE{ g_iBtnWidth, g_iBtnHeight }
 
 // Snapshot button size, position and ID
-const     UINT nSnapBtnID         = UNIQUE_ID;
-constexpr int  iSnapBtnOffsetLeft = 5;
-constexpr int  iSnapBtnOffsetTop  = 2;
-constexpr auto szSnapBtnText      = L"Snapshot";
+const     UINT g_nSnapBtnID         = UNIQUE_ID;
+constexpr int  g_iSnapBtnOffsetLeft = 5;
+constexpr int  g_iSnapBtnOffsetTop  = 2;
+constexpr auto g_szSnapBtnText      = L"Snapshot";
 
 // Save to file button size, position and ID
-const     UINT nSaveBtnID         = UNIQUE_ID;
-constexpr int  iSaveBtnOffsetLeft = 2 * iSnapBtnOffsetLeft + iBtnWidth;
-constexpr int  iSaveBtnOffsetTop  = iSnapBtnOffsetTop;
-constexpr auto szSaveBtnText      = L"Dump";
+const     UINT g_nSaveBtnID         = UNIQUE_ID;
+constexpr int  g_iSaveBtnOffsetLeft = 2 * g_iSnapBtnOffsetLeft + g_iBtnWidth;
+constexpr int  g_iSaveBtnOffsetTop  = g_iSnapBtnOffsetTop;
+constexpr auto g_szSaveBtnText      = L"Dump";
 
-// Default columns (std::initializer_list is fine here)
+// View default columns (std::initializer_list is fine here)
 const auto g_columns = { L"Executable", L"PID", L"Parent PID", L"Thread count" };
 
 
@@ -92,21 +87,23 @@ namespace system_stats
 
         static unsigned int __stdcall _SchedulerProcedure(_In_ void* pThis) noexcept;
 
-    public:
+    private:
         LRESULT MSG_HANDLER OnTimedUpdate(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSize(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSizing(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnCommand(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSnapBtnPressed();
         LRESULT MSG_HANDLER OnSaveBtnPressed();
+        LRESULT MSG_HANDLER OnViewItemDblClicked(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
     private:
         CMainApp()
-            : m_WndClass({ 0 })
+            : m_WndClass({ sizeof(decltype(m_WndClass)) })
             , m_hInstance(nullptr)
             , m_hWnd(nullptr)
             , m_hSchedulerThread(nullptr)
             , m_hSchedulerWantStop(ATL::CEvent(TRUE, FALSE))
+            , m_dwTimeOut(g_dwDefaultTimeout)
             , m_bInitialized(false)
         { };
 
@@ -140,6 +137,10 @@ namespace system_stats
 
         // Save button
         CButton          m_hSaveBtn;
+
+        // Update timeout value and timeout combo-box
+        DWORD            m_dwTimeOut;
+        CComboBox        m_hCombobox; // not implemented yet
 
         // Various auxilary flags
         std::atomic_bool m_bInitialized;
