@@ -82,7 +82,7 @@ namespace system_stats
 
     /* CProcessesView message handlers */
 
-    afx_msg void CProcessesView::OnLButtonDblClk(UINT nFlags, CPoint point)
+    afx_msg void CProcessesView::OnLButtonDblClk(_In_ UINT nFlags, _In_ CPoint point)
     {
         CListCtrl::OnLButtonDblClk(nFlags, point);
 

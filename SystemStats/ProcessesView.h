@@ -30,7 +30,7 @@ namespace system_stats
     protected:
         DECLARE_MESSAGE_MAP()
 
-        afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
+        afx_msg void OnLButtonDblClk(_In_ UINT nFlags, _In_ CPoint point);
 
     private:
         std::vector<PROCESSENTRY32> m_Items;
