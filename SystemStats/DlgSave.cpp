@@ -69,8 +69,6 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
         // it (token is a sequence between two commas) and ensure
         // that all tokens represent a number or a range.
         // 
-        // TODO: check range validity
-        // 
 
         std::wregex SubrangeRegex(LR"(^([1-9]\d*|[1-9]\d*-[1-9]\d*)$)");
 
@@ -85,6 +83,25 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
 
             if (sText.IsEmpty() || !regex_match(std::wstring(sToken), SubrangeRegex)) {
                 exc::ThrowRuntimeError("Invalid range");
+            }
+
+            //
+            // If token is a range - check this range validity:
+            // the beginning must be less or equal to the end
+            // 
+
+            if (sToken.Find(L'-') != -1)
+			{
+				int iNumberBegin = 0;
+				CString sBegin = sToken.Tokenize(L"-", iNumberBegin);
+				CString sEnd   = sToken.Tokenize(L"-", iNumberBegin);
+
+                size_t ullBegin = std::stoull(std::wstring(sBegin));
+                size_t ullEnd   = std::stoull(std::wstring(sEnd));
+
+				if (ullBegin > ullEnd) {
+					exc::ThrowRuntimeError("Invalid range");
+                }
             }
         }
     }
