@@ -3,6 +3,7 @@
 #include "MainApp.h"
 #include "resource.h"
 #include "i18n.h"
+#include "Utils.h"
 
 // STL headers
 #include <vector>
@@ -195,7 +196,9 @@ namespace system_stats
     }
 
     DWORD CMainApp::_UpdateInfo()
-    {
+	{
+		utils::CWaitCursor wc;
+
         //
         // Freeze current state to retrieve information
         // 

@@ -4,6 +4,7 @@
 #include "Exception.h"
 #include "resource.h"
 #include "i18n.h"
+#include "Utils.h"
 
 // STL headers
 #include <string>
@@ -23,6 +24,8 @@ END_MESSAGE_MAP()
 
 BOOL CDlgSave::OnInitDialog()
 {
+    utils::CWaitCursor wc;
+
     CDialog::OnInitDialog();
 
     //
@@ -39,6 +42,8 @@ BOOL CDlgSave::OnInitDialog()
 
 void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
 {
+	utils::CWaitCursor wc;
+
     namespace exc = system_stats::exception;
 
     if (!pDX->m_bSaveAndValidate) {

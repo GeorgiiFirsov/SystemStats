@@ -3,6 +3,7 @@
 #include "DlgProcessInfo.h"
 #include "resource.h"
 #include "i18n.h"
+#include "Utils.h"
 
 // STL headers
 #include <string>
@@ -19,6 +20,8 @@ END_MESSAGE_MAP()
 
 BOOL CDlgProcessInfo::OnInitDialog()
 {
+	utils::CWaitCursor wc;
+
     CDialog::OnInitDialog();
 
     m_Executable.SetWindowText(m_ProcessInfo.szExeFile);
