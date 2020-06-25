@@ -90,6 +90,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
+    IDS_ERROR_INVALIDRANGE  "Invalid range"
 END
 
 

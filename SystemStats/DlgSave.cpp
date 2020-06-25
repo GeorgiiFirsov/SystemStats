@@ -65,7 +65,7 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
         sText.Trim();
 
         if (sText.IsEmpty() || sText[0] == L',' || sText.Find(L",,") != -1) {
-            ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid range");
+            ERROR_THROW_CODE(ERROR_INVALID_INDEX, system_stats::i18n::LoadUIString(IDS_ERROR_INVALIDRANGE));
         }
 
         //
@@ -86,7 +86,7 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
             sToken.Replace(L" ", L"");
 
             if (sText.IsEmpty() || !regex_match(std::wstring(sToken), SubrangeRegex)) {
-                ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid range");
+                ERROR_THROW_CODE(ERROR_INVALID_INDEX, system_stats::i18n::LoadUIString(IDS_ERROR_INVALIDRANGE));
             }
 
             //
@@ -104,7 +104,7 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
                 size_t ullEnd   = std::stoull(std::wstring(sEnd));
 
                 if (ullBegin > ullEnd) {
-                    ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid range");
+                    ERROR_THROW_CODE(ERROR_INVALID_INDEX, system_stats::i18n::LoadUIString(IDS_ERROR_INVALIDRANGE));
                 }
             }
         }
