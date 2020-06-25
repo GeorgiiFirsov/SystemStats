@@ -60,9 +60,9 @@ int CALLBACK wWinMain(
 
         return static_cast<int>(Msg.wParam);
     }
-    catch(const std::runtime_error& error)
+    catch(const exc::CWin32Error& error)
     {
         exc::DisplayErrorMessage(error);
-        return ERROR_FUNCTION_FAILED;
+        return error.Code();
     }
 }

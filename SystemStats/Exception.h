@@ -12,8 +12,8 @@
 
 
 // Macro used for throwing common types of exceptions
-#define ERROR_THROW_LAST() system_stats::exception::ThrowRuntimeError("code == ", GetLastError())
-#define ERROR_THROW_CODE(_Code) system_stats::exception::ThrowRuntimeError("code == ", (_Code))
+#define ERROR_THROW_LAST(...) system_stats::exception::CWin32Error(GetLastError(), __FILEW__, __LINE__, __VA_ARGS__)
+#define ERROR_THROW_CODE(_Code, ...) system_stats::exception::CWin32Error((_Code), __FILEW__, __LINE__, __VA_ARGS__)
 
 
 namespace system_stats
@@ -22,11 +22,11 @@ namespace exception
 {
 namespace
 {
-    inline void PutIntoStream(std::stringstream&) 
+    void PutIntoStream(std::wstringstream&) 
     { /* End of template recursion */ }
 
-    template<typename First, typename... Rest>
-    void PutIntoStream(std::stringstream& stream, First&& first, Rest&&... rest)
+    template<typename First, typename... Rest> 
+    void PutIntoStream(std::wstringstream& stream, First&& first, Rest&&... rest)
     {
         std::stringstream::fmtflags flags = stream.flags();
 
@@ -39,35 +39,51 @@ namespace
         );
 
         if constexpr (std::is_same<First, DWORD>::value) {
-            stream << std::hex << std::setw(8) << std::setfill('0');
+            stream << std::hex << std::setw(8) << std::setfill(L'0');
         }
 
-        stream << first << " ";
+        stream << first << L' ';
         stream.flags(flags);
 
         PutIntoStream(stream, std::forward<Rest>(rest)...);
     }
 }
 
-    // Composes string with arguments and throws an exception
-    // with this string as description
-    template<typename... Args>
-    [[noreturn]] void ThrowRuntimeError(Args&&... args)
+    class CWin32Error
     {
-        std::stringstream stream;
-        
-        stream << "An error occurred.\nMessage: ";
-        PutIntoStream(stream, std::forward<Args>(args)...);
-        stream << "\n";
+    public:
+        template<typename... Args>
+        CWin32Error(DWORD dwErrorCode, LPCWSTR szFile, DWORD dwLine, Args&&... args)
+            : m_wsDescription({})
+            , m_dwErrorCode(dwErrorCode)
+        {
+            std::wstringstream stream;
+            stream << L"Error code: " << m_dwErrorCode << L'\n'
+                   << L"File: " << szFile << L'\n'
+                   << L"Line: " << dwLine << L'\n';
 
-        throw std::runtime_error(stream.str());
-    }
+            if constexpr (sizeof...(Args)) {
+                stream << L"Arguments: ";
+                PutIntoStream(stream, std::forward<Args>(args)...);
+                stream << L'\n';
+            }
+
+            m_wsDescription = std::move(stream.str());
+        }
+
+        LPCWSTR Description() const { return m_wsDescription.c_str(); }
+        DWORD Code() const noexcept { return m_dwErrorCode; }
+
+    private:
+        std::wstring m_wsDescription;
+        DWORD        m_dwErrorCode;
+    };
 
     // Function that displays a message about error
-    inline void DisplayErrorMessage(const std::runtime_error& error, HWND hWnd = nullptr) noexcept
+    inline void DisplayErrorMessage(const CWin32Error& error, HWND hWnd = nullptr) noexcept
     {
-        ::OutputDebugStringA(error.what());
-        ::MessageBoxA(hWnd, error.what(), szApplicationNameA, MB_ICONERROR);
+        ::OutputDebugString(error.Description());
+        ::MessageBox(hWnd, error.Description(), szApplicationName, MB_ICONERROR);
     }
 
 } // namespace exception

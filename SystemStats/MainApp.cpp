@@ -437,10 +437,10 @@ namespace system_stats
 
             counter = counter % 2 + 1;
         }
-        catch(const std::runtime_error& error)
+        catch(const exc::CWin32Error& error)
         {
             exc::DisplayErrorMessage(error);
-            return ERROR_FUNCTION_FAILED;
+            return error.Code();
         }
 
         return static_cast<LRESULT>(0);
@@ -466,12 +466,10 @@ namespace system_stats
                 ::MessageBox(m_hWnd, L"Saving is not supported yet", szApplicationName, MB_ICONWARNING);
             }
         }
-        catch(const std::runtime_error& error)
+        catch(const exc::CWin32Error& error)
         {
-            OutputDebugStringA(error.what());
             exc::DisplayErrorMessage(error);
-
-            dwResult = ERROR_FUNCTION_FAILED;
+            dwResult = error.Code();
         }
 
         if (bIsSchedulerRunning) {
@@ -508,18 +506,16 @@ namespace system_stats
             dwResult = m_View.GetNthProcess(nItem, Info);
 
             if (dwResult != ERROR_SUCCESS) {
-                exc::ThrowRuntimeError("Invalid item selected");
+                ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid item selected");
             }
 
             CDlgProcessInfo Dlg(Info, CWnd::FromHandle(m_hWnd));
             Dlg.DoModal();
         }
-        catch(const std::runtime_error& error)
+        catch(const exc::CWin32Error& error)
         {
-            OutputDebugStringA(error.what());
             exc::DisplayErrorMessage(error);
-
-            dwResult = ERROR_FUNCTION_FAILED;
+            dwResult = error.Code();
         }
 
         if (bIsSchedulerRunning) {

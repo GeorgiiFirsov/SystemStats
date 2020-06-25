@@ -9,8 +9,6 @@ namespace i18n {
 
     LPCWSTR CResourceCache::Get(_In_ UINT uId)
     {
-        namespace exc = system_stats::exception;
-
         auto ResIterator = m_Storage.find(uId);
         if (ResIterator != m_Storage.end()) {
             return ResIterator->second.c_str();
@@ -19,7 +17,7 @@ namespace i18n {
         DWORD dwResult = Load(uId, ResIterator);
 
         if (dwResult != ERROR_SUCCESS) {
-            exc::ThrowRuntimeError(dwResult);
+            ERROR_THROW_CODE(dwResult);
         }
         
         return ResIterator->second.c_str();
@@ -58,7 +56,7 @@ namespace i18n {
         {
             return cache.Get(uId);
         }
-        catch (const std::runtime_error& error)
+        catch (const exc::CWin32Error& error)
         {
             exc::DisplayErrorMessage(error);
             return nullptr;

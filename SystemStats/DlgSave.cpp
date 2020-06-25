@@ -60,7 +60,7 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
         sText.Trim();
 
         if (sText.IsEmpty() || sText[0] == L',' || sText.Find(L",,") != -1) {
-            exc::ThrowRuntimeError("Invalid range");
+            ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid range");
         }
 
         //
@@ -81,7 +81,7 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
             sToken.Replace(L" ", L"");
 
             if (sText.IsEmpty() || !regex_match(std::wstring(sToken), SubrangeRegex)) {
-                exc::ThrowRuntimeError("Invalid range");
+                ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid range");
             }
 
             //
@@ -99,12 +99,12 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
                 size_t ullEnd   = std::stoull(std::wstring(sEnd));
 
                 if (ullBegin > ullEnd) {
-                    exc::ThrowRuntimeError("Invalid range");
+                    ERROR_THROW_CODE(ERROR_INVALID_INDEX, L"Invalid range");
                 }
             }
         }
     }
-    catch(const std::runtime_error& error)
+    catch(const exc::CWin32Error& error)
     {
         exc::DisplayErrorMessage(error, m_hWnd);
         AfxThrowUserException();
@@ -115,7 +115,9 @@ void CDlgSave::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
 
-    DDV_GoodRange(pDX);
+    if (m_hRdChoose.IsWindowEnabled()) {
+        DDV_GoodRange(pDX);
+    }
 
     DDX_Control(pDX, IDC_SAVEDLG_FILENAME, m_hEditFile);
     DDX_Control(pDX, IDC_SAVEDLG_RDALL, m_hRdAll);
