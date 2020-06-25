@@ -91,8 +91,18 @@ STRINGTABLE
 BEGIN
     IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
     IDS_ERROR_INVALIDRANGE  "Invalid range"
+    IDS_ERROR_CREATEFILEFAILED
+                            "Cannot create file"
+    IDS_ERROR_WRITEFILEFAILED
+                            "WriteFile call failed"
 END
 
+// Saving to file
+STRINGTABLE
+BEGIN
+    IDS_FILEHEADER          "System Statistics app.\n(c)2020 Georgy Firsov\n\n"
+    IDS_FMT_PROCESSINFO     "Process entry (#%u in dump). Executable: %s, PID = %u, process priority = %u, parent PID = %u, number of threads = %u\n"
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //

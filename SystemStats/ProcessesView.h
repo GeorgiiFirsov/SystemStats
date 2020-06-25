@@ -24,6 +24,8 @@ namespace system_stats
         _On_failure_(return == -1)
         int InsertItem(_In_ const PROCESSENTRY32& Info);
 
+        size_t GetCount() { return m_Items.size(); }
+
         _On_failure_(return == ERROR_SUCCESS)
         DWORD GetNthProcess(_In_ size_t nIndex, _Out_ PROCESSENTRY32& Entry);
 

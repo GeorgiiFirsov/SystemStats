@@ -9,6 +9,7 @@
 // STL headers
 #include <string>
 #include <regex>
+#include <numeric>
 
 
 IMPLEMENT_DYNAMIC(CDlgSave, CDialog)
@@ -53,7 +54,7 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
     try
     {		
         WCHAR buffer[MAX_PATH + 1] = { 0 };
-        int iRead = m_hEditRecords.GetLine(0, buffer, _countof(buffer) - 1);
+        m_hEditRecords.GetLine(0, buffer, _countof(buffer) - 1);
 
         //
         // We need to check input string. First chech for
@@ -120,7 +121,7 @@ void CDlgSave::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
 
-    if (m_hRdChoose.IsWindowEnabled()) {
+    if (m_hRdChoose.GetCheck() == BST_CHECKED) {
         DDV_GoodRange(pDX);
     }
 
@@ -145,4 +146,59 @@ afx_msg void CDlgSave::OnRdAllPressed()
     if (m_hRdAll.GetCheck() == BST_CHECKED) {
         m_hEditRecords.EnableWindow(FALSE);
     }
+}
+
+afx_msg void CDlgSave::OnOK()
+{
+    WCHAR file[MAX_PATH + 1];
+    int iWritten = m_hEditFile.GetLine(0, file, _countof(file) - 1);
+
+    m_wsFileName.assign(file, static_cast<size_t>(iWritten));
+
+    if (m_hRdAll.GetCheck() == BST_CHECKED) 
+    {
+        m_Indexes.clear();
+    }
+    else
+    {
+        WCHAR buffer[MAX_PATH + 1] = { 0 };
+        m_hEditRecords.GetLine(0, buffer, _countof(buffer) - 1);
+
+        //
+        // Assume here, that the range is validated
+        // 
+
+        CString sRange(buffer);
+        sRange.Replace(L" ", L"");
+
+        int iTokenBegin = 0;
+        for (CString sToken = ""; !sToken.IsEmpty() || iTokenBegin != -1; sToken = sRange.Tokenize(L",", iTokenBegin))
+        {
+            if (iTokenBegin == 0) {
+                continue;
+            }
+
+            //
+            // Now include all listed indexes into resulting set
+            // 
+
+            if (sToken.Find(L'-') == -1)
+            {
+                m_Indexes.insert(std::stoull(std::wstring(sToken)) - 1);
+            }
+            else
+            {
+                int iNumberBegin = 0;
+                CString sBegin = sToken.Tokenize(L"-", iNumberBegin);
+                CString sEnd   = sToken.Tokenize(L"-", iNumberBegin);
+
+                auto InsertIter = m_Indexes.end();
+                for (size_t num = std::stoull(std::wstring(sBegin)); num <= std::stoull(std::wstring(sEnd)); num++) {
+                    m_Indexes.insert(InsertIter, num - 1);
+                }
+            }
+        }
+    }
+
+    CDialog::OnOK();
 }

@@ -4,6 +4,10 @@
 #include "stdafx.h"
 #include "resource.h"
 
+// STL headers
+#include <set>
+#include <string>
+
 
 // Class-wrapper over dialog shown when user
 // clicks on "Dump" button. It asks user about
@@ -28,6 +32,9 @@ public:
 
     virtual BOOL OnInitDialog() override;
 
+    std::set<size_t> GetSavingRange() { return m_Indexes; }
+    std::wstring GetFileName() { return m_wsFileName; }
+
 protected:
     virtual void DoDataExchange(CDataExchange* pDX) override;
 
@@ -41,8 +48,9 @@ protected:
 
     afx_msg void OnRdChoosePressed();
     afx_msg void OnRdAllPressed();
+    afx_msg void OnOK() override;
 
-private:
+protected:
     // Edit control with file name
     CEdit   m_hEditFile;
 
@@ -55,4 +63,11 @@ private:
     // Radio button that enables edit control with 
     // request to specify which records to save
     CButton m_hRdChoose;
+
+    // Storage for zero-based indexes, set by user. 
+    // Empty if all items need to be saved
+    std::set<size_t> m_Indexes;
+
+    // File name that is used to store saved data
+    std::wstring     m_wsFileName;
 };

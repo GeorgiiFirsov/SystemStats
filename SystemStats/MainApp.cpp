@@ -466,7 +466,93 @@ namespace system_stats
 
             if (Dlg.DoModal() == IDOK) 
             {
-                ::MessageBox(m_hWnd, L"Saving is not supported yet", szApplicationName, MB_ICONWARNING);
+                utils::CWaitCursor wc;
+
+                std::set<size_t> Range = Dlg.GetSavingRange();
+
+                //
+                // If empty, then all records are going
+                // to be saved.
+                // 
+
+                if (Range.empty()) 
+                {
+                    size_t ullSize = m_View.GetCount();
+
+                    auto InsertIter = Range.end();
+                    for(size_t num = 0; num < ullSize; num++) {
+                        Range.insert(InsertIter, num);
+                    }
+                }
+
+                //
+                // Creating a file
+                // 
+
+                ATL::CHandle hFile;
+                hFile.m_h = ::CreateFile(
+                    Dlg.GetFileName().c_str(),
+                    GENERIC_READ | GENERIC_WRITE,
+                    FILE_SHARE_READ,
+                    nullptr,
+                    CREATE_ALWAYS,
+                    0,
+                    nullptr
+                );
+
+                if (hFile == INVALID_HANDLE_VALUE) 
+                {
+                    hFile.m_h = nullptr;
+                    ERROR_THROW_LAST(i18n::LoadUIString(IDS_ERROR_CREATEFILEFAILED));
+                }
+
+                //
+                // Writing file header
+                // 
+
+                std::wstring wsHeader = i18n::LoadUIString(IDS_FILEHEADER);
+                BOOL bWritten = ::WriteFile(
+                    hFile, 
+                    wsHeader.data(), 
+                    wsHeader.size() * sizeof(std::wstring::value_type), 
+                    nullptr, 
+                    nullptr
+                );
+                if (!bWritten) {
+                    ERROR_THROW_LAST(i18n::LoadUIString(IDS_ERROR_WRITEFILEFAILED));
+                }
+
+                //
+                // Writing all requested records
+                // 
+
+                for (size_t nIndex : Range)
+                {
+                    PROCESSENTRY32 Process;
+                    m_View.GetNthProcess(nIndex, Process);
+
+                    CString sProcessInfo;
+                    sProcessInfo.Format(
+                        i18n::LoadUIString(IDS_FMT_PROCESSINFO),
+                        nIndex + 1,
+                        Process.szExeFile,
+                        Process.th32ProcessID,
+                        Process.pcPriClassBase,
+                        Process.th32ParentProcessID,
+                        Process.cntThreads
+                    );
+
+                    bWritten = ::WriteFile(
+                        hFile,
+                        sProcessInfo.GetBuffer(), 
+                        sProcessInfo.GetLength() * sizeof(CString::XCHAR),
+                        nullptr,
+                        nullptr
+                    );
+                    if (!bWritten) {
+                        ERROR_THROW_LAST(i18n::LoadUIString(IDS_ERROR_WRITEFILEFAILED));
+                    }
+                }
             }
         }
         catch(const exc::CWin32Error& error)
