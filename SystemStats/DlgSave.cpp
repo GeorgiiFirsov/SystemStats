@@ -2,7 +2,8 @@
 #include "stdafx.h"
 #include "DlgSave.h"
 #include "Exception.h"
-#include "afxdialogex.h"
+#include "resource.h"
+#include "i18n.h"
 
 // STL headers
 #include <string>
@@ -28,10 +29,8 @@ BOOL CDlgSave::OnInitDialog()
     // Set initial state of elements
     // 
 
-    // TODO: put strings to resources
-
-    m_hEditFile.SetWindowText(L"SystemStats.txt");
-    m_hEditRecords.SetWindowText(L"1-100");
+    m_hEditFile.SetWindowText(system_stats::i18n::LoadUIString(IDS_DUMPFILE));
+    m_hEditRecords.SetWindowText(system_stats::i18n::LoadUIString(IDS_DEFAULTRANGE));
 
     m_hRdAll.SetCheck(BST_CHECKED);
 

@@ -1,7 +1,8 @@
 // Project files
 #include "stdafx.h"
 #include "DlgProcessInfo.h"
-#include "afxdialogex.h"
+#include "resource.h"
+#include "i18n.h"
 
 // STL headers
 #include <string>
@@ -43,7 +44,7 @@ BOOL CDlgProcessInfo::OnInitDialog()
 
         CString sMessage;
         sMessage.Format(
-            L"Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed.", 
+            system_stats::i18n::LoadUIString(IDS_ERROR_PROCESSACCESS),
             GetLastError()
         );
 

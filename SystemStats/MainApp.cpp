@@ -1,6 +1,8 @@
 // Project headers
 #include "stdafx.h"
 #include "MainApp.h"
+#include "resource.h"
+#include "i18n.h"
 
 // STL headers
 #include <vector>
@@ -159,7 +161,7 @@ namespace system_stats
             CPoint SnapBtnPos(g_iSnapBtnOffsetLeft, g_iSnapBtnOffsetTop);
 
             m_hSnapBtn.Create(
-                g_szSnapBtnText, 
+                i18n::LoadUIString(IDS_SNAPSHOT), 
                 WS_CHILD | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON, 
                 CRect(SnapBtnPos, BUTTON_SIZE),
                 CWnd::FromHandle(m_hWnd),
@@ -176,7 +178,7 @@ namespace system_stats
             CPoint SaveBtnPos(g_iSaveBtnOffsetLeft, g_iSaveBtnOffsetTop);
 
             m_hSaveBtn.Create(
-                g_szSaveBtnText,
+                i18n::LoadUIString(IDS_DUMP),
                 WS_CHILD | BS_CENTER | BS_VCENTER | BS_PUSHBUTTON,
                 CRect(SaveBtnPos, BUTTON_SIZE),
                 CWnd::FromHandle(m_hWnd),

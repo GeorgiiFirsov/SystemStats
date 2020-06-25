@@ -164,7 +164,8 @@
     <ClCompile Include="DlgProcessInfo.cpp" />
     <ClCompile Include="DlgSave.cpp" />
     <ClCompile Include="MainApp.cpp" />
-    <ClCompile Include="ProcessView.cpp" />
+    <ClCompile Include="ProcessesView.cpp" />
+    <ClCompile Include="i18n.cpp" />
     <ClCompile Include="SystemStats.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="DlgSave.h" />
     <ClInclude Include="ProcessesView.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="i18n.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="MainApp.h" />

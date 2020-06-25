@@ -7,6 +7,8 @@
 // STL headers
 #include <stdexcept>
 #include <sstream>
+#include <type_traits>
+#include <iomanip>
 
 
 // Macro used for throwing common types of exceptions
@@ -26,7 +28,23 @@ namespace
     template<typename First, typename... Rest>
     void PutIntoStream(std::stringstream& stream, First&& first, Rest&&... rest)
     {
+        std::stringstream::fmtflags flags = stream.flags();
+
+        static_assert(
+            _HAS_CXX17,
+			"Here is a place with C++17 feature. If you want to "
+			"compile this code with older language standard you "
+			"have to remove constexpr. Maybe it is necessary to "
+            "suppress warning about constant condition "
+        );
+
+        if constexpr (std::is_same<First, DWORD>::value) {
+            stream << std::hex << std::setw(8) << std::setfill('0');
+        }
+
         stream << first << " ";
+		stream.flags(flags);
+
         PutIntoStream(stream, std::forward<Rest>(rest)...);
     }
 }

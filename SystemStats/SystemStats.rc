@@ -60,6 +60,41 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// String Table
+//
+
+// Buttons
+STRINGTABLE
+BEGIN
+    IDS_SNAPSHOT            "Snapshot"
+    IDS_DUMP                "Dump"
+END
+
+// Table columns
+STRINGTABLE
+BEGIN
+    IDS_EXECUTABLE          "Executable"
+    IDS_PID                 "PID"
+    IDS_PPID                "Parent PID"
+    IDS_THREADS             "Thread count"
+END
+
+// Some necessary resources
+STRINGTABLE
+BEGIN
+    IDS_DUMPFILE            "SystemStats.txt"
+    IDS_DEFAULTRANGE        "1-100"
+END
+
+// Error messages
+STRINGTABLE
+BEGIN
+    IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // DESIGNINFO
 //
 

@@ -6,6 +6,8 @@
 #include "DlgProcessInfo.h"
 #include "Exception.h"
 #include "ProcessesView.h"
+#include "resource.h"
+#include "i18n.h"
 
 // Windows headers
 #include <atlsync.h>
@@ -44,16 +46,19 @@ constexpr int g_iBtnHeight = 22;
 const     UINT g_nSnapBtnID         = UNIQUE_ID;
 constexpr int  g_iSnapBtnOffsetLeft = 5;
 constexpr int  g_iSnapBtnOffsetTop  = 2;
-constexpr auto g_szSnapBtnText      = L"Snapshot";
 
 // Save to file button size, position and ID
 const     UINT g_nSaveBtnID         = UNIQUE_ID;
 constexpr int  g_iSaveBtnOffsetLeft = 2 * g_iSnapBtnOffsetLeft + g_iBtnWidth;
 constexpr int  g_iSaveBtnOffsetTop  = g_iSnapBtnOffsetTop;
-constexpr auto g_szSaveBtnText      = L"Dump";
 
 // View default columns (std::initializer_list is fine here)
-const auto g_columns = { L"Executable", L"PID", L"Parent PID", L"Thread count" };
+const auto g_columns = {
+	system_stats::i18n::LoadUIString(IDS_EXECUTABLE),
+	system_stats::i18n::LoadUIString(IDS_PID),
+	system_stats::i18n::LoadUIString(IDS_PPID),
+	system_stats::i18n::LoadUIString(IDS_THREADS)
+};
 
 
 namespace system_stats
