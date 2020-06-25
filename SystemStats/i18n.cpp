@@ -7,63 +7,63 @@ extern HINSTANCE g_hInstance;
 namespace system_stats {
 namespace i18n {
 
-	LPCWSTR CResourceCache::Get(_In_ UINT uId)
-	{
-		namespace exc = system_stats::exception;
+    LPCWSTR CResourceCache::Get(_In_ UINT uId)
+    {
+        namespace exc = system_stats::exception;
 
-		auto ResIterator = m_Storage.find(uId);
-		if (ResIterator != m_Storage.end()) {
-			return ResIterator->second.c_str();
-		}
+        auto ResIterator = m_Storage.find(uId);
+        if (ResIterator != m_Storage.end()) {
+            return ResIterator->second.c_str();
+        }
 
-		DWORD dwResult = Load(uId, ResIterator);
+        DWORD dwResult = Load(uId, ResIterator);
 
-		if (dwResult != ERROR_SUCCESS) {
-			exc::ThrowRuntimeError(dwResult);
-		}
-		
-		return ResIterator->second.c_str();
-	}
+        if (dwResult != ERROR_SUCCESS) {
+            exc::ThrowRuntimeError(dwResult);
+        }
+        
+        return ResIterator->second.c_str();
+    }
 
-	_Check_return_
-	DWORD CResourceCache::Load(_In_ UINT uId, _Inout_ mapping_t::iterator& Position)
-	{
-		std::vector<WCHAR> buffer(MAX_PATH + 1, 0); // Ensure last symbol to be zero
+    _Check_return_
+    DWORD CResourceCache::Load(_In_ UINT uId, _Inout_ mapping_t::iterator& Position)
+    {
+        std::vector<WCHAR> buffer(MAX_PATH + 1, 0); // Ensure last symbol to be zero
 
-		int cchBuffer = ::LoadString(
-			g_hInstance,
-			uId,
-			buffer.data(),
-			MAX_PATH
-		);
+        int cchBuffer = ::LoadString(
+            g_hInstance,
+            uId,
+            buffer.data(),
+            MAX_PATH
+        );
 
-		if (cchBuffer == 0) {
-			return GetLastError();
-		}
+        if (cchBuffer == 0) {
+            return GetLastError();
+        }
 
-		Position = m_Storage.emplace_hint(Position, uId, std::wstring(buffer.data(), cchBuffer));
+        Position = m_Storage.emplace_hint(Position, uId, std::wstring(buffer.data(), cchBuffer));
 
-		return ERROR_SUCCESS;
-	}
+        return ERROR_SUCCESS;
+    }
 
 
-	/* Functions */
+    /* Functions */
 
-	LPCWSTR LoadUIString(_In_ UINT uId)
-	{
-		namespace exc = system_stats::exception;
+    LPCWSTR LoadUIString(_In_ UINT uId)
+    {
+        namespace exc = system_stats::exception;
 
-		static CResourceCache cache;
-		try
-		{
-			return cache.Get(uId);
-		}
-		catch (const std::runtime_error& error)
-		{
-			exc::DisplayErrorMessage(error);
-			return nullptr;
-		}
-	}
+        static CResourceCache cache;
+        try
+        {
+            return cache.Get(uId);
+        }
+        catch (const std::runtime_error& error)
+        {
+            exc::DisplayErrorMessage(error);
+            return nullptr;
+        }
+    }
 
 } // namespace i18n
 } // namespace system_stats

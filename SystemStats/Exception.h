@@ -32,9 +32,9 @@ namespace
 
         static_assert(
             _HAS_CXX17,
-			"Here is a place with C++17 feature. If you want to "
-			"compile this code with older language standard you "
-			"have to remove constexpr. Maybe it is necessary to "
+            "Here is a place with C++17 feature. If you want to "
+            "compile this code with older language standard you "
+            "have to remove constexpr. Maybe it is necessary to "
             "suppress warning about constant condition "
         );
 
@@ -43,7 +43,7 @@ namespace
         }
 
         stream << first << " ";
-		stream.flags(flags);
+        stream.flags(flags);
 
         PutIntoStream(stream, std::forward<Rest>(rest)...);
     }

@@ -54,10 +54,10 @@ constexpr int  g_iSaveBtnOffsetTop  = g_iSnapBtnOffsetTop;
 
 // View default columns (std::initializer_list is fine here)
 const auto g_columns = {
-	system_stats::i18n::LoadUIString(IDS_EXECUTABLE),
-	system_stats::i18n::LoadUIString(IDS_PID),
-	system_stats::i18n::LoadUIString(IDS_PPID),
-	system_stats::i18n::LoadUIString(IDS_THREADS)
+    system_stats::i18n::LoadUIString(IDS_EXECUTABLE),
+    system_stats::i18n::LoadUIString(IDS_PID),
+    system_stats::i18n::LoadUIString(IDS_PPID),
+    system_stats::i18n::LoadUIString(IDS_THREADS)
 };
 
 
