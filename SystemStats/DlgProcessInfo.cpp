@@ -20,7 +20,7 @@ END_MESSAGE_MAP()
 
 BOOL CDlgProcessInfo::OnInitDialog()
 {
-	utils::CWaitCursor wc;
+    utils::CWaitCursor wc;
 
     CDialog::OnInitDialog();
 

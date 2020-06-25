@@ -42,7 +42,7 @@ BOOL CDlgSave::OnInitDialog()
 
 void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
 {
-	utils::CWaitCursor wc;
+    utils::CWaitCursor wc;
 
     namespace exc = system_stats::exception;
 

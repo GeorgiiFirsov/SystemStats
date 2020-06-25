@@ -196,8 +196,8 @@ namespace system_stats
     }
 
     DWORD CMainApp::_UpdateInfo()
-	{
-		utils::CWaitCursor wc;
+    {
+        utils::CWaitCursor wc;
 
         //
         // Freeze current state to retrieve information
