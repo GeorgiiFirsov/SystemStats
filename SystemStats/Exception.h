@@ -12,8 +12,8 @@
 
 
 // Macro used for throwing common types of exceptions
-#define ERROR_THROW_LAST(...) system_stats::exception::CWin32Error(GetLastError(), __FILEW__, __LINE__, __VA_ARGS__)
-#define ERROR_THROW_CODE(_Code, ...) system_stats::exception::CWin32Error((_Code), __FILEW__, __LINE__, __VA_ARGS__)
+#define ERROR_THROW_LAST(...) throw system_stats::exception::CWin32Error(GetLastError(), __FILEW__, __LINE__, __VA_ARGS__)
+#define ERROR_THROW_CODE(_Code, ...) throw system_stats::exception::CWin32Error((_Code), __FILEW__, __LINE__, __VA_ARGS__)
 
 
 namespace system_stats
