@@ -35,10 +35,6 @@ namespace system_stats
             return Application.OnViewItemDblClicked(hWnd, wParam, lParam);
             break;
 
-        case WM_SIZE:
-            return Application.OnSize(hWnd, wParam, lParam);
-            break;
-
         case WM_SIZING:
             return Application.OnSizing(hWnd, wParam, lParam);
             break;
@@ -113,8 +109,8 @@ namespace system_stats
             // Create main window and show it
             // 
 
-            int iWidth  = Rect.Width() < g_iWndMinWidth ? g_iWndMinWidth : Rect.Width();
-            int iHeight = Rect.Height() < g_iWndMinHeight ? g_iWndMinHeight : Rect.Height();
+            int iWidth  = Rect.Width() != g_iWndWidth ? g_iWndWidth : Rect.Width();
+            int iHeight = Rect.Height() != g_iWndHeight ? g_iWndHeight : Rect.Height();
 
             m_hWnd = ::CreateWindow(
                 szApplicationName,
@@ -340,29 +336,6 @@ namespace system_stats
         return static_cast<LRESULT>(0);
     }
 
-    LRESULT MSG_HANDLER CMainApp::OnSize(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam)
-    {
-        //
-        // Handler of WM_SIZE message
-        // 
-
-        UNREFERENCED_PARAMETER(hWnd);
-        UNREFERENCED_PARAMETER(wParam);
-        UNREFERENCED_PARAMETER(lParam);
-
-        CRect Rect;
-        ::GetWindowRect(m_hWnd, &Rect);
-
-        Rect.right  -= Rect.left - g_iLVOffsetLeft;
-        Rect.bottom -= Rect.top - g_iLVOffsetTop;
-        Rect.left = g_iLVOffsetLeft;
-        Rect.top  = g_iLVOffsetTop;
-
-        m_View.MoveWindow(Rect);
-
-        return static_cast<LRESULT>(0);
-    }
-
     LRESULT MSG_HANDLER CMainApp::OnSizing(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam)
     {
         //
@@ -372,7 +345,7 @@ namespace system_stats
         UNREFERENCED_PARAMETER(hWnd);
 
         //
-        // Check minimal size and apply minimal values if necessary
+        // Restrict resizing!
         // 
 
         auto pRect = reinterpret_cast<LPRECT>(lParam);
@@ -380,23 +353,23 @@ namespace system_stats
         int iWidth = pRect->right - pRect->left;
         int iHeight = pRect->bottom - pRect->top;
 
-        if (iWidth < g_iWndMinWidth)
+        if (iWidth < g_iWndWidth)
         {
             if (wParam == WMSZ_LEFT || wParam == WMSZ_TOPLEFT || wParam == WMSZ_BOTTOMLEFT) {
-                pRect->left = pRect->right - g_iWndMinWidth;
+                pRect->left = pRect->right - g_iWndWidth;
             }
             else if (wParam == WMSZ_RIGHT || wParam == WMSZ_TOPRIGHT || wParam == WMSZ_BOTTOMRIGHT) {
-                pRect->right = pRect->left + g_iWndMinWidth;
+                pRect->right = pRect->left + g_iWndWidth;
             }
         }
 
-        if (iHeight < g_iWndMinHeight)
+        if (iHeight != g_iWndHeight)
         {
             if (wParam == WMSZ_TOP || wParam == WMSZ_TOPLEFT || wParam == WMSZ_TOPRIGHT) {
-                pRect->top = pRect->bottom - g_iWndMinHeight;
+                pRect->top = pRect->bottom - g_iWndHeight;
             }
             else if (wParam == WMSZ_BOTTOM || wParam == WMSZ_BOTTOMLEFT || wParam == WMSZ_BOTTOMRIGHT) {
-                pRect->bottom = pRect->top + g_iWndMinHeight;
+                pRect->bottom = pRect->top + g_iWndHeight;
             }
         }
 

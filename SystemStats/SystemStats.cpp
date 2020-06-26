@@ -9,10 +9,6 @@
 // Global application instance
 HINSTANCE g_hInstance;
 
-// Default window size
-constexpr int iWidth  = 1000;
-constexpr int iHeight = 500;
-
 
 // Application entry point
 int CALLBACK wWinMain( 
@@ -43,7 +39,7 @@ int CALLBACK wWinMain(
         // 
 
         CPoint TopLeft(CW_USEDEFAULT, CW_USEDEFAULT);
-        CRect Rect(TopLeft, SIZE{iWidth, iHeight});
+        CRect Rect(TopLeft, SIZE{g_iWndWidth, g_iWndHeight});
 
         Application.CreateAndShowWindow(Rect, nShowCmd);
 

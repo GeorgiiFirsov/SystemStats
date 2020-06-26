@@ -73,16 +73,16 @@ BOOL CDlgProcessInfo::OnInitDialog()
             GetLastError()
         );
 
-		::MessageBox(m_hWnd, sMessage, szApplicationName, MB_ICONWARNING);
+        ::MessageBox(m_hWnd, sMessage, szApplicationName, MB_ICONWARNING);
 
-		m_CreationTitle.ShowWindow(SW_HIDE);
-		m_CreationText.ShowWindow(SW_HIDE);
-		m_KernelTitle.ShowWindow(SW_HIDE);
-		m_KernelText.ShowWindow(SW_HIDE);
-		m_UserTitle.ShowWindow(SW_HIDE);
-		m_UserText.ShowWindow(SW_HIDE);
-		m_ProtectionTitle.ShowWindow(SW_HIDE);
-		m_ProtectionText.ShowWindow(SW_HIDE);
+        m_CreationTitle.ShowWindow(SW_HIDE);
+        m_CreationText.ShowWindow(SW_HIDE);
+        m_KernelTitle.ShowWindow(SW_HIDE);
+        m_KernelText.ShowWindow(SW_HIDE);
+        m_UserTitle.ShowWindow(SW_HIDE);
+        m_UserText.ShowWindow(SW_HIDE);
+        m_ProtectionTitle.ShowWindow(SW_HIDE);
+        m_ProtectionText.ShowWindow(SW_HIDE);
 
         return TRUE;
     }
@@ -109,20 +109,23 @@ BOOL CDlgProcessInfo::OnInitDialog()
 
     if (bResult)
     {
-        FILETIME   ftLocalTime;
+        FILETIME ftLocalTime;
 
+        SecureZeroMemory(&ftLocalTime, sizeof(ftLocalTime));
         ::FileTimeToLocalFileTime(&ftCreationTime, &ftLocalTime);
         CString sTime = utils::FileTimeAsDatetimeString(&ftLocalTime);
         if (!sTime.IsEmpty()) {
             m_CreationText.SetWindowText(sTime);
         }
 
+        SecureZeroMemory(&ftLocalTime, sizeof(ftLocalTime));
         ::FileTimeToLocalFileTime(&ftKernelTime, &ftLocalTime);
         sTime = utils::FileTimeAsTimeString(&ftLocalTime);
         if (!sTime.IsEmpty()) {
             m_KernelText.SetWindowText(sTime);
         }
 
+        SecureZeroMemory(&ftLocalTime, sizeof(ftLocalTime));
         ::FileTimeToLocalFileTime(&ftUserTime, &ftLocalTime);
         sTime = utils::FileTimeAsTimeString(&ftLocalTime);
         if (!sTime.IsEmpty()) {

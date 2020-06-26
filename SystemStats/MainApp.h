@@ -28,9 +28,9 @@ constexpr DWORD g_dwDefaultTimeout = 2;
 // Maximum wait timeout for stopping scheduler (in seconds)
 constexpr DWORD g_dwSchedulerWaitTimeout = 5;
 
-// Minimal window size
-constexpr int g_iWndMinWidth  = 500;
-constexpr int g_iWndMinHeight = 300;
+// Window size
+constexpr int g_iWndWidth = 1000;
+constexpr int g_iWndHeight = 500;
 
 // List view position
 constexpr int g_iLVOffsetTop  = 28;
@@ -94,7 +94,6 @@ namespace system_stats
 
     private:
         LRESULT MSG_HANDLER OnTimedUpdate(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
-        LRESULT MSG_HANDLER OnSize(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSizing(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnCommand(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSnapBtnPressed();

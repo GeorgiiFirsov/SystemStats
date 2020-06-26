@@ -41,6 +41,7 @@ namespace {
     inline CString FileTimeAsDatetimeString(_In_ const FILETIME* lpFileTime)
     {
         SYSTEMTIME stTime;
+        SecureZeroMemory(&stTime, sizeof(stTime));
 
         BOOL bResult = ::FileTimeToSystemTime(lpFileTime, &stTime);
         if (!bResult) {
@@ -58,6 +59,7 @@ namespace {
     inline CString FileTimeAsTimeString(const FILETIME* lpFileTime)
     {
         SYSTEMTIME stTime;
+        SecureZeroMemory(&stTime, sizeof(stTime));
 
         BOOL bResult = ::FileTimeToSystemTime(lpFileTime, &stTime);
         if (!bResult) {
