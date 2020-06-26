@@ -189,8 +189,6 @@ namespace system_stats
             m_hSaveBtn.ShowWindow(nShowCmd);
             m_hSaveBtn.UpdateWindow();
 
-            // TODO: timeout combobox
-
             _RunScheduler();
         });
     }
@@ -514,7 +512,7 @@ namespace system_stats
                 BOOL bWritten = ::WriteFile(
                     hFile, 
                     wsHeader.data(), 
-                    wsHeader.size() * sizeof(std::wstring::value_type), 
+                    static_cast<DWORD>(wsHeader.size() * sizeof(std::wstring::value_type)), 
                     nullptr, 
                     nullptr
                 );

@@ -145,7 +145,6 @@ namespace system_stats
 
         // Update timeout value and timeout combo-box
         DWORD            m_dwTimeOut;
-        CComboBox        m_hCombobox; // not implemented yet
 
         // Various auxilary flags
         std::atomic_bool m_bInitialized;

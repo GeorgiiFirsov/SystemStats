@@ -49,60 +49,22 @@ BEGIN
     LTEXT           "Process identifier: .............................................",IDC_STATIC,13,30,180,8
     LTEXT           "Process priority: ...............................................",IDC_STATIC,13,40,180,8
     LTEXT           "Parent process identifier: ....................................",IDC_STATIC,13,50,180,8
-    LTEXT           "not available",IDC_DLGINFO_EXETEXT,194,20,100,8
+    LTEXT           "not available",IDC_DLGINFO_EXETEXT,194,20,100,8,SS_ENDELLIPSIS
     LTEXT           "not available",IDC_DLGINFO_PIDTEXT,194,30,100,8
     LTEXT           "not available",IDC_DLGINFO_PRTEXT,194,40,100,8
     LTEXT           "not available",IDC_DLGINFO_PPIDTEXT,194,50,100,8
     GROUPBOX        "Process extended info",IDC_STATIC,7,70,295,59
-    CTEXT           "Access denied",IDC_DLGINFO_ACCESSTEXT,9,97,289,8
+    LTEXT           "Creation time: .................................................",IDC_DLGINFO_CREATIONTITLE,13,83,180,8
+    LTEXT           "Kernel time: ....................................................",IDC_DLGINFO_KERNELTITLE,13,93,180,8
+    LTEXT           "User time: ......................................................",IDC_DLGINFO_USERTITLE,13,103,180,8
+    LTEXT           "Protection level: ...............................................",IDC_DLGINFO_PROTECTIONTITLE,13,113,180,8
+    LTEXT           "not available",IDC_DLGINFO_CREATIONTEXT,194,83,100,8
+    LTEXT           "not available",IDC_DLGINFO_KERNELTEXT,194,93,100,8
+    LTEXT           "not available",IDC_DLGINFO_USERTEXT,194,103,100,8
+    LTEXT           "not available",IDC_DLGINFO_PROTECTIONTEXT,194,113,100,8
+    CTEXT           "Access denied",IDC_DLGINFO_ACCESSTEXT,9,98,289,8
 END
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-// Buttons
-STRINGTABLE
-BEGIN
-    IDS_SNAPSHOT            "Snapshot"
-    IDS_DUMP                "Dump"
-END
-
-// Table columns
-STRINGTABLE
-BEGIN
-    IDS_EXECUTABLE          "Executable"
-    IDS_PID                 "PID"
-    IDS_PPID                "Parent PID"
-    IDS_THREADS             "Thread count"
-END
-
-// Some necessary resources
-STRINGTABLE
-BEGIN
-    IDS_DUMPFILE            "SystemStats.txt"
-    IDS_DEFAULTRANGE        "1-100"
-END
-
-// Error messages
-STRINGTABLE
-BEGIN
-    IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
-    IDS_ERROR_INVALIDRANGE  "Invalid range"
-    IDS_ERROR_CREATEFILEFAILED
-                            "Cannot create file"
-    IDS_ERROR_WRITEFILEFAILED
-                            "WriteFile call failed"
-END
-
-// Saving to file
-STRINGTABLE
-BEGIN
-    IDS_FILEHEADER          "System Statistics app.\n(c)2020 Georgy Firsov\n\n"
-    IDS_FMT_PROCESSINFO     "Process entry (#%u in dump). Executable: %s, PID = %u, process priority = %u, parent PID = %u, number of threads = %u\n"
-END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -167,6 +129,36 @@ BEGIN
 END
 
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_SNAPSHOT            "Snapshot"
+    IDS_DUMP                "Dump"
+    IDS_EXECUTABLE          "Executable"
+    IDS_PID                 "PID"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PPID                "Parent PID"
+    IDS_THREADS             "Thread count"
+    IDS_DUMPFILE            "SystemStats.txt"
+    IDS_DEFAULTRANGE        "1-100"
+    IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
+    IDS_ERROR_INVALIDRANGE  "Invalid range"
+    IDS_FILEHEADER          "System Statistics app.\n(c)2020 Georgy Firsov\n\n"
+    IDS_FMT_PROCESSINFO     "Process entry (#%u in dump). Executable: %s, PID = %u, process priority = %u, parent PID = %u, number of threads = %u\n"
+    IDS_ERROR_CREATEFILEFAILED "Cannot create file"
+    IDS_ERROR_WRITEFILEFAILED "WriteFile call failed"
+    IDS_FMT_DATETIME        "%04u-%02u-%02uT%02u:%02u:%02u.%03u"
+    IDS_FMT_TIME            "%02u:%02u:%02u"
+END
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

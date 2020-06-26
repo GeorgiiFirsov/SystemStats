@@ -2,6 +2,10 @@
 #include "stdafx.h"
 #include "i18n.h"
 
+// STL headers
+#include <vector>
+
+
 extern HINSTANCE g_hInstance;
 
 namespace system_stats {

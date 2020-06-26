@@ -49,4 +49,20 @@ protected:
 
     // "Access denied" caption in extended information block
     CStatic m_AccessDeniedText;
+
+    // Process creation time title and text
+    CStatic m_CreationTitle;
+    CStatic m_CreationText;
+
+    // Kernel time title and text
+    CStatic m_KernelTitle;
+    CStatic m_KernelText;
+
+    // User time title and text
+    CStatic m_UserTitle;
+    CStatic m_UserText;
+
+    // Protection info title and text
+    CStatic m_ProtectionTitle;
+    CStatic m_ProtectionText;
 };

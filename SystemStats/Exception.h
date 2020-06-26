@@ -2,7 +2,6 @@
 
 // Project headers
 #include "stdafx.h"
-#include "Utils.h"
 
 // STL headers
 #include <stdexcept>
