@@ -40,6 +40,8 @@ protected:
 
     void DDV_GoodRange(CDataExchange* pDX);
 
+    bool IsRangeValid();
+
     //
     // Message handlers
     // 

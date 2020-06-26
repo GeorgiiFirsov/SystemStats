@@ -43,16 +43,23 @@ BOOL CDlgSave::OnInitDialog()
 
 void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
 {
-    utils::CWaitCursor wc;
-
-    namespace exc = system_stats::exception;
-
     if (!pDX->m_bSaveAndValidate) {
         return;
     }
 
+    if (!IsRangeValid()) {
+        AfxThrowUserException();
+    }
+}
+
+bool CDlgSave::IsRangeValid()
+{
+    utils::CWaitCursor wc;
+
+    namespace exc = system_stats::exception;
+
     try
-    {		
+    {
         WCHAR buffer[MAX_PATH + 1] = { 0 };
         m_hEditRecords.GetLine(0, buffer, _countof(buffer) - 1);
 
@@ -99,21 +106,23 @@ void CDlgSave::DDV_GoodRange(CDataExchange* pDX)
             {
                 int iNumberBegin = 0;
                 CString sBegin = sToken.Tokenize(L"-", iNumberBegin);
-                CString sEnd   = sToken.Tokenize(L"-", iNumberBegin);
+                CString sEnd = sToken.Tokenize(L"-", iNumberBegin);
 
                 size_t ullBegin = std::stoull(std::wstring(sBegin));
-                size_t ullEnd   = std::stoull(std::wstring(sEnd));
+                size_t ullEnd = std::stoull(std::wstring(sEnd));
 
                 if (ullBegin > ullEnd) {
                     ERROR_THROW_CODE(ERROR_INVALID_INDEX, system_stats::i18n::LoadUIString(IDS_ERROR_INVALIDRANGE));
                 }
             }
         }
+
+        return true;
     }
-    catch(const exc::CWin32Error& error)
+    catch (const exc::CWin32Error& error)
     {
         exc::DisplayErrorMessage(error, m_hWnd);
-        AfxThrowUserException();
+        return false;
     }
 }
 
@@ -150,6 +159,10 @@ afx_msg void CDlgSave::OnRdAllPressed()
 
 afx_msg void CDlgSave::OnOK()
 {
+    if (!IsRangeValid()) {
+        return;
+    }
+
     WCHAR file[MAX_PATH + 1];
     int iWritten = m_hEditFile.GetLine(0, file, _countof(file) - 1);
 
