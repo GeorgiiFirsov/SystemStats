@@ -72,4 +72,9 @@
     <None Include="..\LICENSE" />
     <None Include="..\README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\MainIcon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

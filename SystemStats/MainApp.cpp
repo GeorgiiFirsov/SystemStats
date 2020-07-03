@@ -73,12 +73,12 @@ namespace system_stats
             m_WndClass.cbClsExtra    = 0;
             m_WndClass.cbWndExtra    = 0;
             m_WndClass.hInstance     = hInstance;
-            m_WndClass.hIcon         = LoadIcon(hInstance, IDI_APPLICATION);
+            m_WndClass.hIcon         = LoadIcon(m_WndClass.hInstance, MAKEINTRESOURCE(IDI_MAINICON));
+            m_WndClass.hIconSm       = LoadIcon(m_WndClass.hInstance, MAKEINTRESOURCE(IDI_MAINICON));
             m_WndClass.hCursor       = LoadCursor(nullptr, IDC_ARROW);
             m_WndClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
             m_WndClass.lpszMenuName  = nullptr;
             m_WndClass.lpszClassName = pszClassName;
-            m_WndClass.hIconSm       = LoadIcon(m_WndClass.hInstance, IDI_APPLICATION);
 
             auto Result = ::RegisterClassEx(&m_WndClass);
             if (!Result) {

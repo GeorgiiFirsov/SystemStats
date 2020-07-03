@@ -12,6 +12,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
+
 /////////////////////////////////////////////////////////////////////////////
 // English (United States) resources
 
@@ -104,6 +105,46 @@ BEGIN
     0
 END
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_MAINICON            ICON                    "resources\\MainIcon.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_SNAPSHOT            "Snapshot"
+    IDS_DUMP                "Dump"
+    IDS_EXECUTABLE          "Executable"
+    IDS_PID                 "PID"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PPID                "Parent PID"
+    IDS_THREADS             "Thread count"
+    IDS_DUMPFILE            "SystemStats.txt"
+    IDS_DEFAULTRANGE        "1-100"
+    IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
+    IDS_ERROR_INVALIDRANGE  "Invalid range"
+    IDS_FILEHEADER          "System Statistics app.\n(c)2020 Georgy Firsov\n\n"
+    IDS_FMT_PROCESSINFO     "Process entry (#%u in dump). Executable: %s, PID = %u, process priority = %u, parent PID = %u, number of threads = %u\n"
+    IDS_ERROR_CREATEFILEFAILED "Cannot create file"
+    IDS_ERROR_WRITEFILEFAILED "WriteFile call failed"
+    IDS_FMT_DATETIME        "%04u-%02u-%02uT%02u:%02u:%02u.%03u"
+    IDS_FMT_TIME            "%02u:%02u:%02u"
+    IDS_SNAPSHOT_RESUME     "Resume"
+END
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -129,38 +170,6 @@ BEGIN
 END
 
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// String Table
-//
-
-STRINGTABLE
-BEGIN
-    IDS_SNAPSHOT            "Snapshot"
-    IDS_SNAPSHOT_RESUME     "Resume"
-    IDS_DUMP                "Dump"
-    IDS_EXECUTABLE          "Executable"
-    IDS_PID                 "PID"
-END
-
-STRINGTABLE
-BEGIN
-    IDS_PPID                "Parent PID"
-    IDS_THREADS             "Thread count"
-    IDS_DUMPFILE            "SystemStats.txt"
-    IDS_DEFAULTRANGE        "1-100"
-    IDS_ERROR_PROCESSACCESS "Cannot query extended information due to error with code 0x%08X.\nNot all information will be displayed."
-    IDS_ERROR_INVALIDRANGE  "Invalid range"
-    IDS_FILEHEADER          "System Statistics app.\n(c)2020 Georgy Firsov\n\n"
-    IDS_FMT_PROCESSINFO     "Process entry (#%u in dump). Executable: %s, PID = %u, process priority = %u, parent PID = %u, number of threads = %u\n"
-    IDS_ERROR_CREATEFILEFAILED "Cannot create file"
-    IDS_ERROR_WRITEFILEFAILED "WriteFile call failed"
-    IDS_FMT_DATETIME        "%04u-%02u-%02uT%02u:%02u:%02u.%03u"
-    IDS_FMT_TIME            "%02u:%02u:%02u"
-END
-
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
