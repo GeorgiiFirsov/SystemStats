@@ -94,6 +94,7 @@ namespace system_stats
 
     private:
         LRESULT MSG_HANDLER OnTimedUpdate(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
+        LRESULT MSG_HANDLER OnDestroy(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSizing(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnCommand(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam);
         LRESULT MSG_HANDLER OnSnapBtnPressed();

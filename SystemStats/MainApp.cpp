@@ -27,6 +27,10 @@ namespace system_stats
     {
         switch (Msg)
         {
+        case WM_DESTROY:
+            return Application.OnDestroy(hWnd, wParam, lParam);
+            break;
+
         case WM_TIMEDUPDATE:
             return Application.OnTimedUpdate(hWnd, wParam, lParam);
             break;
@@ -41,10 +45,6 @@ namespace system_stats
 
         case WM_COMMAND:
             return Application.OnCommand(hWnd, wParam, lParam);
-            break;
-
-        case WM_DESTROY:
-            PostQuitMessage(0);
             break;
 
         default:
@@ -336,6 +336,21 @@ namespace system_stats
         return static_cast<LRESULT>(0);
     }
 
+    LRESULT MSG_HANDLER CMainApp::OnDestroy(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam)
+    {
+        //
+        // Handler of WM_DESTROY message
+        // 
+        
+        UNREFERENCED_PARAMETER(hWnd);
+        UNREFERENCED_PARAMETER(wParam);
+        UNREFERENCED_PARAMETER(lParam);
+
+        PostQuitMessage(EXIT_SUCCESS);
+        
+        return static_cast<LRESULT>(0);
+    }
+
     LRESULT MSG_HANDLER CMainApp::OnSizing(_In_ HWND hWnd, _In_ WPARAM wParam, _In_ LPARAM lParam)
     {
         //
@@ -406,8 +421,16 @@ namespace system_stats
 
         try
         {
-            if (counter % 2) _RunScheduler();
-            else _StopScheduler();
+            if (counter % 2) 
+            {
+                _RunScheduler();
+                m_hSnapBtn.SetWindowText(i18n::LoadUIString(IDS_SNAPSHOT));
+            }
+            else 
+            {
+                _StopScheduler();
+                m_hSnapBtn.SetWindowText(i18n::LoadUIString(IDS_SNAPSHOT_RESUME));
+            }
 
             counter = counter % 2 + 1;
         }

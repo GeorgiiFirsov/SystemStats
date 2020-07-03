@@ -139,6 +139,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_SNAPSHOT            "Snapshot"
+    IDS_SNAPSHOT_RESUME     "Resume"
     IDS_DUMP                "Dump"
     IDS_EXECUTABLE          "Executable"
     IDS_PID                 "PID"
